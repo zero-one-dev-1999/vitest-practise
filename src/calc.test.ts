@@ -1,17 +1,24 @@
-import { describe, expect, test } from 'vitest'
+import { expect, test } from 'vitest'
+import { Calc } from './calc'
 
-describe('Faqat shu testlar ishlaydi', () => {
-	test('Test 1', () => {
-		expect(1 + 1).toBe(2)
-	})
+const cases: [string, string[]][] = [
+	['1', ['', '1', '']],
+	['.', ['', '0.', '']],
+	['1.', ['', '1.', '']],
+	['1+', ['', '1', '+']],
+	['10+40', ['10', '40', '+']],
+	['10+40+', ['', '50', '+']],
+	['10+40+20', ['50', '20', '+']],
+	['10+40+20=', ['', '70', '']],
+	['10.5+40.5+20=', ['', '71', '']],
+] as const
 
-	test('Test 2', () => {
-		expect(2 * 2).toBe(4)
-	})
-})
+cases.forEach(([input, [previous, current, operator]]) => {
+	test(`${input} => p: ${previous}, c: ${current}, o: ${operator}`, () => {
+		const calc = new Calc()
 
-describe('Bu testlar ishlamaydi', () => {
-	test('Test 3', () => {
-		expect(3 + 3).toBe(6)
+		calc.input(input)
+
+		expect(calc.state).toEqual({ previous, current, operator })
 	})
 })
